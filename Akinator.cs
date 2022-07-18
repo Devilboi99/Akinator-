@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using BinaryTrees;
 
 namespace SimpleAkinator
 {
     public class Akinator
     {
-        private BinaryTree<string> Root;
+        private BinaryTree BinaryTree;
 
         public Akinator()
         {
-            Root = new BinaryTree<string>();
-            Root.Add("Неизвестно что?");
+            BinaryTree = new BinaryTree();
         }
 
         public void Start()
@@ -39,22 +35,21 @@ namespace SimpleAkinator
 
         private void FindAnswer()
         {
-            var treeNode = Root;
-            
+            BinaryTree.GoToStart();
             while (true)
             {
-                Console.WriteLine(treeNode.Data);
+                Console.WriteLine(BinaryTree.Data);
                 var answerFromHumanYN = Console.ReadLine()?.ToLower();
-                if (treeNode.IsAnswer())
-                    EndProgram(treeNode, answerFromHumanYN);
+                if (BinaryTree.IsAnswer())
+                    CompletedFind(answerFromHumanYN);
 
                 switch (answerFromHumanYN)
                 {
                     case "yes":
-                       treeNode.GoTo(Direction.Left);
+                       BinaryTree.GoTo(Direction.Left);
                        continue;
                     case "no":
-                        treeNode.GoTo(Direction.Right); ;
+                        BinaryTree.GoTo(Direction.Right); ;
                         continue;
                     default:
                         throw new ArgumentException($"Такое я не понимать: {answerFromHumanYN}");
@@ -62,13 +57,12 @@ namespace SimpleAkinator
             }
         }
 
-        private void EndProgram(BinaryTree<string> treeNode,
-            string? answerFromHumanYN)
+        private void CompletedFind(string? answerFromHumanYN)
         {
             switch (answerFromHumanYN)
             {
                 case "no":
-                    AddNewObject(treeNode);
+                    AddNewObject();
                     Start();
                     break;
                 case "yes":
@@ -78,18 +72,13 @@ namespace SimpleAkinator
             }
         }
 
-        public void AddNewObject(BinaryTree<string> treeNode)
+        public void AddNewObject()
         {
             Console.WriteLine("Что это?");
             var obj = Console.ReadLine();
-            Console.WriteLine($"Чем оно отличается от {treeNode.Data}");
+            Console.WriteLine($"Чем оно отличается от {BinaryTree.Data}");
             var question = Console.ReadLine();
-            if (treeNode.IsRootTree)
-            {
-               treeNode.ChangeRoot(question,obj);
-               return;
-            }
-            treeNode.CreateNode(question,obj);
+            BinaryTree.CreateNode(question,obj);
         }
 
         public void SaveDate()
@@ -100,7 +89,7 @@ namespace SimpleAkinator
 
         public void Serialization()
         {
-            foreach (var treeNode in Root)
+            foreach (var treeNode in BinaryTree)
             {
             }
         }

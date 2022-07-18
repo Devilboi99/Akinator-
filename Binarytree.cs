@@ -8,42 +8,50 @@ using SimpleAkinator;
 
 namespace BinaryTrees
 {
-    public class BinaryTree<T> : IEnumerable<T> where T : IComparable
+    public class BinaryTree : IEnumerable
     {
-        public class TreeNode<T> where T : IComparable
+        public class TreeNode
         {
-            public T Value { get; set; }
-            public TreeNode<T> Left { get; set; }
-            public TreeNode<T> Right { get; set; }
-            public TreeNode<T> PrevTreeNode { get; set; }
+            public string Value { get; set; }
+            public TreeNode Left { get; set; }
+            public TreeNode Right { get; set; }
+            public TreeNode PrevTreeNode { get; set; }
             public int Weight { get; set; }
         }
 
-        private TreeNode<T> _root;
-
+        private TreeNode _root = new TreeNode() {Value = "Неизвестно что"};
         
-        public T Data => _root.Value;
-        public bool IsRootTree => _root.PrevTreeNode == null;
+        
+
+        public string Data => _root.Value;
+        public bool IsRoot => _root.PrevTreeNode == null;
         public bool IsAnswer() => _root.Left == null;
         
-        public void CreateNode(T question, T obj)
+        public void CreateNode(string question, string obj)
         {
+            if (IsRoot)
+            {
+                var treeNode = _root;
+                _root = new TreeNode() { Value = question};
+                _root.Left = new TreeNode() {Value = obj};
+                _root.Right = treeNode;
+                return;
+            }
+            
             if (_root.PrevTreeNode.Left.Value.CompareTo(_root.Value) == 0)
             {
-                _root.PrevTreeNode.Left = new TreeNode<T>() {Value = question};
+                _root.PrevTreeNode.Left = new TreeNode() {Value = question};
                 var newTreeNode = _root.PrevTreeNode.Left;
-                newTreeNode.Left = new TreeNode<T> {Value = obj};
+                newTreeNode.Left = new TreeNode {Value = obj};
                 newTreeNode.Right = _root;
             }
             else
             {
-                _root.PrevTreeNode.Right = new TreeNode<T>() {Value = question};
+                _root.PrevTreeNode.Right = new TreeNode() {Value = question};
                 var newTreeNode = _root.PrevTreeNode.Right;
-                newTreeNode.Left = new TreeNode<T>() {Value = obj};
+                newTreeNode.Left = new TreeNode() {Value = obj};
                 newTreeNode.Right = _root;
             }
-
-
         }
         
         public void GoTo(Direction dir)
@@ -63,56 +71,11 @@ namespace BinaryTrees
 
             _root.PrevTreeNode = treeNode;
         }
+        
+        
+        
 
-        public void ChangeRoot(T question, T obj)
-        {
-            var treeNode = _root;
-            _root = new TreeNode<T>() { Value = question};
-            _root.Left = new TreeNode<T>() {Value = obj};
-            _root.Right = treeNode;
-        }
-
-        public void Add(T value)
-        {
-            if (_root == null)
-            {
-                _root = new TreeNode<T>() {Value = value};
-                return;
-            }
-
-            if (value.GetType() != _root.Value.GetType()) throw new ArgumentException();
-            FindFreeSpace(value, _root);
-        }
-
-        private static void FindFreeSpace(T value, TreeNode<T> currentTreeNode)
-        {
-            while (true)
-            {
-                currentTreeNode.Weight++;
-                if (value.CompareTo(currentTreeNode.Value) < 0)
-                {
-                    if (currentTreeNode.Left == null)
-                    {
-                        currentTreeNode.Left = new TreeNode<T>() {Value = value, Weight = 1};
-                        return;
-                    }
-
-                    currentTreeNode = currentTreeNode.Left;
-                }
-                else
-                {
-                    if (currentTreeNode.Right == null)
-                    {
-                        currentTreeNode.Right = new TreeNode<T>() {Value = value, Weight = 1};
-                        return;
-                    }
-
-                    currentTreeNode = currentTreeNode.Right;
-                }
-            }
-        }
-
-        public bool Contains(T value)
+        public bool Contains(string value)
         {
             var currentNode = _root;
             while (true)
@@ -122,31 +85,13 @@ namespace BinaryTrees
                 currentNode = value.CompareTo(currentNode.Value) < 0 ? currentNode.Left : currentNode.Right;
             }
         }
-
-        public T this[int index]
-        {
-            get
-            {
-                if (index < 0 && index >= _root.Weight)
-                    throw new IndexOutOfRangeException();
-                return TakeByIndex(_root, index);
-            }
-        }
-
-        private static T TakeByIndex(TreeNode<T> treeNode, int index)
-        {
-            if (index == (treeNode.Left != null ? treeNode.Left.Weight : 0)) return treeNode.Value;
-            if (index < (treeNode.Left != null ? treeNode.Left.Weight : 0)) return TakeByIndex(treeNode.Left, index);
-            return TakeByIndex(treeNode.Right, index - (treeNode.Left != null ? treeNode.Left.Weight + 1 : 1));
-        }
-
-
-        public IEnumerator<T> GetEnumerator()
+        
+        public IEnumerator GetEnumerator()
         {
             return TakeElementOrderBy(_root).GetEnumerator();
         }
 
-        private IEnumerable<T> TakeElementOrderBy(TreeNode<T> treeNode)
+        private IEnumerable TakeElementOrderBy(TreeNode treeNode)
         {
             if (treeNode == null) yield break;
             foreach (var comparable in TakeElementOrderBy(treeNode.Left))
@@ -161,6 +106,12 @@ namespace BinaryTrees
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public void GoToStart()
+        {
+            while (_root.PrevTreeNode != null)
+                _root = _root.PrevTreeNode;
         }
     }
 }
