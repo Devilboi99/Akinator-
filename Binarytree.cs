@@ -1,34 +1,87 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices.ComTypes;
+using SimpleAkinator;
 
 namespace BinaryTrees
 {
     public class BinaryTree<T> : IEnumerable<T> where T : IComparable
     {
-        private class TreeNode<T> where T : IComparable
+        public class TreeNode<T> where T : IComparable
         {
             public T Value { get; set; }
             public TreeNode<T> Left { get; set; }
             public TreeNode<T> Right { get; set; }
+            public TreeNode<T> PrevTreeNode { get; set; }
             public int Weight { get; set; }
         }
 
-        private TreeNode<T> root;
+        private TreeNode<T> _root;
 
-        public T TakeData()
-            => root.Value;
+        
+        public T Data => _root.Value;
+        public bool IsRootTree => _root.PrevTreeNode == null;
+        public bool IsAnswer() => _root.Left == null;
+        
+        public void CreateNode(T question, T obj)
+        {
+            if (_root.PrevTreeNode.Left.Value.CompareTo(_root.Value) == 0)
+            {
+                _root.PrevTreeNode.Left = new TreeNode<T>() {Value = question};
+                var newTreeNode = _root.PrevTreeNode.Left;
+                newTreeNode.Left = new TreeNode<T> {Value = obj};
+                newTreeNode.Right = _root;
+            }
+            else
+            {
+                _root.PrevTreeNode.Right = new TreeNode<T>() {Value = question};
+                var newTreeNode = _root.PrevTreeNode.Right;
+                newTreeNode.Left = new TreeNode<T>() {Value = obj};
+                newTreeNode.Right = _root;
+            }
+
+
+        }
+        
+        public void GoTo(Direction dir)
+        {
+            var treeNode = _root;
+            switch (dir)
+            {
+                case Direction.Left:
+                    _root = _root.Left;
+                    break;
+                case Direction.Right:
+                    _root = _root.Right;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
+            }
+
+            _root.PrevTreeNode = treeNode;
+        }
+
+        public void ChangeRoot(T question, T obj)
+        {
+            var treeNode = _root;
+            _root = new TreeNode<T>() { Value = question};
+            _root.Left = new TreeNode<T>() {Value = obj};
+            _root.Right = treeNode;
+        }
+
         public void Add(T value)
         {
-            if (root == null)
+            if (_root == null)
             {
-                root = new TreeNode<T>() {Value = value};
-                root.Weight++;
+                _root = new TreeNode<T>() {Value = value};
                 return;
             }
 
-            if (value.GetType() != root.Value.GetType()) throw new ArgumentException();
-            FindFreeSpace(value, root);
+            if (value.GetType() != _root.Value.GetType()) throw new ArgumentException();
+            FindFreeSpace(value, _root);
         }
 
         private static void FindFreeSpace(T value, TreeNode<T> currentTreeNode)
@@ -43,6 +96,7 @@ namespace BinaryTrees
                         currentTreeNode.Left = new TreeNode<T>() {Value = value, Weight = 1};
                         return;
                     }
+
                     currentTreeNode = currentTreeNode.Left;
                 }
                 else
@@ -52,6 +106,7 @@ namespace BinaryTrees
                         currentTreeNode.Right = new TreeNode<T>() {Value = value, Weight = 1};
                         return;
                     }
+
                     currentTreeNode = currentTreeNode.Right;
                 }
             }
@@ -59,7 +114,7 @@ namespace BinaryTrees
 
         public bool Contains(T value)
         {
-            var currentNode = root;
+            var currentNode = _root;
             while (true)
             {
                 if (currentNode == null) return false;
@@ -72,9 +127,9 @@ namespace BinaryTrees
         {
             get
             {
-                if (index < 0 && index >= root.Weight)
+                if (index < 0 && index >= _root.Weight)
                     throw new IndexOutOfRangeException();
-                return TakeByIndex(root, index);
+                return TakeByIndex(_root, index);
             }
         }
 
@@ -88,7 +143,7 @@ namespace BinaryTrees
 
         public IEnumerator<T> GetEnumerator()
         {
-            return TakeElementOrderBy(root).GetEnumerator();
+            return TakeElementOrderBy(_root).GetEnumerator();
         }
 
         private IEnumerable<T> TakeElementOrderBy(TreeNode<T> treeNode)
