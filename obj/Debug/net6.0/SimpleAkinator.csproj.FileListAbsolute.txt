@@ -1,0 +1,15 @@
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\bin\Debug\net6.0\SimpleAkinator.exe
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\bin\Debug\net6.0\SimpleAkinator.deps.json
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\bin\Debug\net6.0\SimpleAkinator.runtimeconfig.json
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\bin\Debug\net6.0\SimpleAkinator.dll
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\bin\Debug\net6.0\SimpleAkinator.pdb
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\SimpleAkinator.csproj.AssemblyReference.cache
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\SimpleAkinator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\SimpleAkinator.AssemblyInfoInputs.cache
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\SimpleAkinator.AssemblyInfo.cs
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\SimpleAkinator.csproj.CoreCompileInputs.cache
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\SimpleAkinator.dll
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\refint\SimpleAkinator.dll
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\SimpleAkinator.pdb
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\SimpleAkinator.genruntimeconfig.cache
+C:\Users\user\RiderProjects\SimpleAkinator\SimpleAkinator\obj\Debug\net6.0\ref\SimpleAkinator.dll
