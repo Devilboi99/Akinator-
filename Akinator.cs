@@ -5,11 +5,11 @@ namespace SimpleAkinator
 {
     public class Akinator
     {
-        private BinaryTree BinaryTree;
-
+        private BinaryTree _binaryTree;
+        public BinaryTree GetData => _binaryTree; 
         public Akinator()
         {
-            BinaryTree = new BinaryTree();
+            _binaryTree = new BinaryTree("Неизвесто что?");
         }
 
         public void Start()
@@ -27,7 +27,7 @@ namespace SimpleAkinator
             }
         }
 
-        public void ActivateAkinator()
+        private void ActivateAkinator()
         {
             Console.WriteLine("Добро пожаловать");
             FindAnswer();
@@ -35,31 +35,32 @@ namespace SimpleAkinator
 
         private void FindAnswer()
         {
-            BinaryTree.GoToStart();
+            _binaryTree.Start();
             while (true)
             {
-                Console.WriteLine(BinaryTree.Data);
-                var answerFromHumanYN = Console.ReadLine()?.ToLower();
-                if (BinaryTree.IsAnswer())
-                    CompletedFind(answerFromHumanYN);
+                Console.WriteLine(_binaryTree.CurData);
+                var answerFromHumanYn = Console.ReadLine()?.ToLower();
+                if (_binaryTree.IsAnswer())
+                    CompletedFind(answerFromHumanYn);
 
-                switch (answerFromHumanYN)
+                switch (answerFromHumanYn)
                 {
                     case "yes":
-                       BinaryTree.GoTo(Direction.Left);
-                       continue;
+                        _binaryTree.GoTo(Direction.Left);
+                        continue;
                     case "no":
-                        BinaryTree.GoTo(Direction.Right); ;
+                        _binaryTree.GoTo(Direction.Right);
                         continue;
                     default:
-                        throw new ArgumentException($"Такое я не понимать: {answerFromHumanYN}");
+                        Console.WriteLine("Либо да или нет?");
+                        continue;
                 }
             }
         }
 
-        private void CompletedFind(string? answerFromHumanYN)
+        private void CompletedFind(string? answerFromHumanYn)
         {
-            switch (answerFromHumanYN)
+            switch (answerFromHumanYn)
             {
                 case "no":
                     AddNewObject();
@@ -76,22 +77,17 @@ namespace SimpleAkinator
         {
             Console.WriteLine("Что это?");
             var obj = Console.ReadLine();
-            Console.WriteLine($"Чем оно отличается от {BinaryTree.Data}");
+
+            Console.WriteLine($"Чем оно отличается от {_binaryTree.CurData}");
             var question = Console.ReadLine();
-            BinaryTree.CreateNode(question,obj);
+
+
+            _binaryTree.CreateNode(question, obj);
         }
 
         public void SaveDate()
         {
             Console.WriteLine("Дай название базе");
-            var nameDate = Console.ReadLine();
-        }
-
-        public void Serialization()
-        {
-            foreach (var treeNode in BinaryTree)
-            {
-            }
         }
     }
 }

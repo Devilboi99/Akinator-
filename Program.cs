@@ -5,4 +5,4 @@ using SimpleAkinator;
 
 Console.WriteLine("Hello, World!");
 var akinator = new Akinator();
-akinator.Start();
+akinator.Start();    
