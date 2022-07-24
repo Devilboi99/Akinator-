@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using SimpleAkinator;
 
 namespace BinaryTrees
@@ -16,18 +8,18 @@ namespace BinaryTrees
         public class TreeNode
         {
             public string? Value { get; set; }
-            public TreeNode Left { get; set; }
-            public TreeNode Right { get; set; }
-            public TreeNode Parent { get; set; }
+            public TreeNode? Left { get; set; }
+            public TreeNode? Right { get; set; }
+            public TreeNode? Parent { get; set; }
         }
 
-        private TreeNode _treeNode;
-        private TreeNode _root;
+        private TreeNode? _treeNode;
+        private TreeNode? _root;
         public void Start() => _treeNode = _root;
-        public TreeNode GetRoot() => _root;
-        public TreeNode CurData => _treeNode;
-        public bool IsAnswer() => _treeNode.Left == null && _treeNode.Right == null;
-        private bool IsRoot => _treeNode.Parent == null;
+        public TreeNode? GetRoot() => _root;
+        public TreeNode? CurData => _treeNode;
+        public bool IsAnswer() => _treeNode?.Left == null && _treeNode?.Right == null;
+        private bool IsRoot => _treeNode?.Parent == null;
 
         public BinaryTree(string defaultTxt)
         {
@@ -35,7 +27,7 @@ namespace BinaryTrees
             _root = _treeNode;
         }
 
-        public BinaryTree(TreeNode root)
+        public BinaryTree(TreeNode? root)
         {
             _treeNode = root;
             _root = _treeNode;
@@ -44,10 +36,11 @@ namespace BinaryTrees
         public void CreateNode(string? question, string? obj)
         {
             TreeNode newTreeNode;
+            
             if (IsRoot)
                 newTreeNode = _root = new TreeNode() {Value = question};
 
-            else if (_treeNode.Parent.Left.Value == _treeNode.Value)
+            else if (_treeNode.Parent.Left.Value == _treeNode?.Value)
                 newTreeNode = _treeNode.Parent.Left = new TreeNode() {Value = question};
 
             else

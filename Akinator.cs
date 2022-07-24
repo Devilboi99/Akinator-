@@ -6,42 +6,41 @@ namespace SimpleAkinator
     public class Akinator
     {
         private BinaryTree _binaryTree;
-        public BinaryTree GetData => _binaryTree; 
+
         public Akinator()
         {
-            _binaryTree = new BinaryTree("Неизвесто что?");
+            _binaryTree = new BinaryTree("Неизвестно что!");
         }
 
         public void Start()
         {
-            Console.WriteLine("Что ты хочешь? [1] - игры, [2] - сохранить базу");
+            Console.WriteLine("Что ты хочешь? [1] - игры, [2] - сохранить базу, [3] - загрузка базы");
             var chose = Console.ReadLine();
+            _binaryTree.Start();
             switch (chose)
             {
                 case "1":
-                    ActivateAkinator();
+                    ActivateGame();
                     break;
                 case "2":
-                    SaveDate();
+                    SaveData();
+                    break;
+                case "3":
+                    LoadData();
                     break;
             }
         }
-
-        private void ActivateAkinator()
+        
+        private void ActivateGame()
         {
             Console.WriteLine("Добро пожаловать");
-            FindAnswer();
-        }
-
-        private void FindAnswer()
-        {
-            _binaryTree.Start();
             while (true)
             {
-                Console.WriteLine(_binaryTree.CurData);
+                Console.WriteLine(_binaryTree.CurData?.Value);
                 var answerFromHumanYn = Console.ReadLine()?.ToLower();
-                if (_binaryTree.IsAnswer())
-                    CompletedFind(answerFromHumanYn);
+                
+                if (_binaryTree.IsAnswer()) 
+                    CheckAnswer(answerFromHumanYn);
 
                 switch (answerFromHumanYn)
                 {
@@ -58,7 +57,7 @@ namespace SimpleAkinator
             }
         }
 
-        private void CompletedFind(string? answerFromHumanYn)
+        private void CheckAnswer(string? answerFromHumanYn)
         {
             switch (answerFromHumanYn)
             {
@@ -76,18 +75,35 @@ namespace SimpleAkinator
         public void AddNewObject()
         {
             Console.WriteLine("Что это?");
-            var obj = Console.ReadLine();
+            var obj = Console.ReadLine() + "!";
 
-            Console.WriteLine($"Чем оно отличается от {_binaryTree.CurData}");
-            var question = Console.ReadLine();
+            Console.WriteLine($"Чем оно отличается от {_binaryTree.CurData?.Value}");
+            var question = Console.ReadLine() + "?";
 
 
             _binaryTree.CreateNode(question, obj);
         }
 
-        public void SaveDate()
+        public void SaveData()
         {
-            Console.WriteLine("Дай название базе");
+            var helper = new HelperTransformation(_binaryTree);
+            helper.MakeSerialize();
+            helper.CreateFileTxt(helper.SerializeData);
+            
+            Start();
+        }
+        
+        private void LoadData()
+        {
+            var helper = new HelperTransformation(_binaryTree);
+            helper.FindFile();
+            
+            if (helper.SerializeData != null)
+                helper.MakeDeserialize(helper.SerializeData.Split('/'));
+            else 
+                Console.WriteLine("Такой нету");
+           
+            Start();
         }
     }
 }
