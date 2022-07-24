@@ -5,7 +5,7 @@ namespace SimpleAkinator
 {
     public class Akinator
     {
-        private BinaryTree _binaryTree;
+        private readonly BinaryTree _binaryTree;
 
         public Akinator()
         {
@@ -16,7 +16,7 @@ namespace SimpleAkinator
         {
             Console.WriteLine("Что ты хочешь? [1] - игры, [2] - сохранить базу, [3] - загрузка базы");
             var chose = Console.ReadLine();
-            _binaryTree.Start();
+            _binaryTree.Reset();
             switch (chose)
             {
                 case "1":

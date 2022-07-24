@@ -15,7 +15,7 @@ namespace BinaryTrees
 
         private TreeNode? _treeNode;
         private TreeNode? _root;
-        public void Start() => _treeNode = _root;
+        public void Reset() => _treeNode = _root;
         public TreeNode? GetRoot() => _root;
         public TreeNode? CurData => _treeNode;
         public bool IsAnswer() => _treeNode?.Left == null && _treeNode?.Right == null;
