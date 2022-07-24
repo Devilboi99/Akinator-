@@ -39,9 +39,8 @@ namespace SimpleAkinator
 
         public void MakeDeserialize(string[] data)
         {
-            var treeNode = _binaryTree.GetRoot();
-            var treeData = CreateArrayTree(data);
-            Deserialize(treeNode, treeData, 1, null);
+            _index = 0;
+            Deserialize(data,null);
         }
 
         private string[] CreateArrayTree(string[] data)
@@ -68,9 +67,56 @@ namespace SimpleAkinator
             return treeArray;
         }
 
-        private void Deserialize(BinaryTree.TreeNode treeNode, string[] data, int curNodeSide, BinaryTree.TreeNode parent)
+        private int _index = 0; 
+        private BinaryTree.TreeNode Deserialize(string[] data, BinaryTree.TreeNode parent)
         {
-            if (data[curNodeSide] == null) return;
+            BinaryTree.TreeNode newTreeNode;
+            
+            if (_index >= data.Length) return null;
+            
+            newTreeNode = _index == 0 ? _binaryTree.GetRoot() : new BinaryTree.TreeNode();
+            
+            newTreeNode.Parent = parent;
+            newTreeNode.Value = data[_index];
+            
+            if (data[_index].Last() == '?')
+            {
+                _index++;
+                newTreeNode.Left = Deserialize(data,newTreeNode);
+                _index++;
+                newTreeNode.Right = Deserialize(data,newTreeNode);
+            }
+            return newTreeNode;
+        }
+    }
+}
+
+
+
+/*var parent = treeNode;
+            treeNode.Value = data[0];
+            treeNode.Left = new BinaryTree.TreeNode();
+            treeNode.Right = new BinaryTree.TreeNode();
+            for (var j = 1; j < data.Length - 1; j++)
+            {
+                if (data[j].Last() == '?')
+                {
+                    treeNode.Value = data[j];
+                    treeNode.Left = new BinaryTree.TreeNode();
+                    treeNode.Right = new BinaryTree.TreeNode();
+                    parent = treeNode;
+                    treeNode = treeNode.Left;
+                    treeNode.Parent = parent;
+                }
+                else
+                {
+                    treeNode.Value = data[j];
+                }
+            }
+
+            treeNode.Parent = parent;*/
+
+/*if (data[curNodeSide] == null) return;
             if (data[curNodeSide].Last() == '?')
             {
                 treeNode.Value = data[curNodeSide];
@@ -85,10 +131,7 @@ namespace SimpleAkinator
             }
                 
 
-            treeNode.Parent = parent;
-        }
-    }
-}
+            treeNode.Parent = parent;*/
 
 
 /*var nameFile = "Firsttest.txt";
