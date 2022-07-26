@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using SimpleAkinator;
 
 namespace BinaryTrees
 {
-    public class BinaryTree
+    public class BinaryTree : IEnumerable<BinaryTree.TreeNode>
     {
         public class TreeNode
         {
@@ -67,6 +69,28 @@ namespace BinaryTrees
             }
 
             _treeNode.Parent = treeNode;
+        }
+        
+        public IEnumerator<TreeNode> GetEnumerator()
+        {
+            return TakeElementOrderBy(_root).GetEnumerator();
+        }
+
+        private IEnumerable<TreeNode> TakeElementOrderBy(TreeNode treeNode)
+        {
+            if (treeNode == null) yield break;
+            foreach (var comparable in TakeElementOrderBy(treeNode.Left))
+                yield return comparable;
+
+            yield return treeNode;
+
+            foreach (var comparable in TakeElementOrderBy(treeNode.Right))
+                yield return comparable;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
